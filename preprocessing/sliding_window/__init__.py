@@ -5,3 +5,5 @@ from .trial_windows import create_trial_windows
 from .compare_window_variances import compare_window_variances
 from .contiguous_windows import find_contiguous_selected_windows
 from .longest_block_per_channel import find_longest_block_per_channel
+from .task_segmentation import extract_task_segment
+from .merge import merge_segments

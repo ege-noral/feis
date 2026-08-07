@@ -6,6 +6,7 @@ from preprocessing.data_loader import split_into_epochs
 from preprocessing.sliding_window import create_trial_windows
 from preprocessing.sliding_window import find_contiguous_selected_windows
 from preprocessing.sliding_window import find_longest_block_per_channel
+from preprocessing.sliding_window import extract_task_segment
 from collections import Counter
 import numpy as np
 import pandas as pd
@@ -14,114 +15,151 @@ import matplotlib.pyplot as plt
 
 def main():
 
-    for subject_id in range(2, 3):
 
-        resting_df = load_subject_dataframe(
-        subject_id=subject_id,
-        condition="resting"
-        )
+    all_results = []
 
-        thinking_df = load_subject_dataframe(
-            subject_id=subject_id,
-            condition="thinking"
-        )
+    for subject_id in range(1, 22): 
+        for trial_id in range(0, 160):  
 
-        resting_trials = split_into_epochs(
-            resting_df
-        )
+            try:
+                result = extract_task_segment(
+                    subject_id=subject_id,
+                    trial_id=trial_id
+                )
 
-        thinking_trials = split_into_epochs(
-            thinking_df
-        )
+                if result is not None:
+                    print(result)
+                    all_results.append(result)
 
+            except Exception as e:
+                print(
+                    f"Subject {subject_id}, "
+                    f"Trial {trial_id} failed: {e}"
+                )
 
-        resting_windows = create_trial_windows(
-            resting_trials,
-            window_size=13,
-            overlap=0.5
-        )
+    print(f"Total results: {len(all_results)}")
 
-        thinking_windows = create_trial_windows(
-            thinking_trials,
-            window_size=13,
-            overlap=0.5
-        )
+#     subject_id = 8
+#     trial_id = 128
 
-        resting_variance = compute_window_variance(
-            resting_windows
-        )
+#     # Load data
+#     resting_df = load_subject_dataframe(
+#         subject_id=subject_id,
+#         condition="resting"
+#     )
 
-        thinking_variance = compute_window_variance(
-            thinking_windows
-        )
+#     thinking_df = load_subject_dataframe(
+#         subject_id=subject_id,
+#         condition="thinking"
+#     )
 
-        results = compare_window_variances(
-            resting_variance,
-            thinking_variance,
-            ratio_threshold=12.0
-        )
+#     # Split into trials
+#     resting_trials = split_into_epochs(resting_df)
+#     thinking_trials = split_into_epochs(thinking_df)
 
-        print("Channel selections:", len(results))
+#     # Window all trials
+#     resting_windows = create_trial_windows(
+#         resting_trials,
+#         window_size=13,
+#         overlap=0.5
+#     )
 
-        unique_windows = {
-            (r["trial"], r["window"])
-            for r in results
-        }
+#     thinking_windows = create_trial_windows(
+#         thinking_trials,
+#         window_size=13,
+#         overlap=0.5
+#     )
 
-        print("Unique windows:", len(unique_windows))
+#     # Compute variances
+#     resting_variance = compute_window_variance(
+#         resting_windows
+#     )
 
-        channel_counts = Counter(
-        r["channel"]
-        for r in results
-        )
+#     thinking_variance = compute_window_variance(
+#         thinking_windows
+#     )
 
-        contiguous_windows = find_contiguous_selected_windows(results)
+#     # Compare variances
+#     results = compare_window_variances(
+#         resting_variance,
+#         thinking_variance,
+#         ratio_threshold=12.0
+#     )
 
-        longest = find_longest_block_per_channel(contiguous_windows)
+#     # Keep only selected trial
+#     trial_results = [
+#         r for r in results
+#         if r["trial"] == trial_id
+#     ]
 
-        for channel, info in sorted(
-            longest.items(),
-            key=lambda x: x[1]["length"],
-            reverse=True
-        )[:5]:
+#     print(
+#         f"Selected channel-windows in trial {trial_id}:",
+#         len(trial_results)
+#     )
 
-            print(
-                channel,
-                "length =", info["length"],
-                "trial =", info["trial"]
-            )
+#     channel_counts = Counter(
+#     r["channel"]
+#     for r in trial_results
+# )
 
-        coverage_counter = Counter()
+#     print("\nChannel counts:")
+#     print(channel_counts)
 
-        for trial, channels in contiguous_windows.items():
+#     top_channels = [
+#         ch
+#         for ch, count in channel_counts.most_common(5)
+#     ]
 
-            for channel, ranges in channels.items():
+#     print("\nTop channels:")
+#     print(top_channels)
 
-                for start, end in ranges:
+#     trial_results = [
+#         r for r in trial_results
+#         if r["channel"] in top_channels
+#     ]
 
-                    for w in range(start, end + 1):
+#     # Find contiguous blocks
+#     contiguous_windows = find_contiguous_selected_windows(
+#         trial_results
+#     )
 
-                        coverage_counter[w] += 1
-        
+#     # Coverage of channels over windows
+#     coverage_counter = Counter()
 
-        top_windows = sorted(
-            coverage_counter.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )
+#     channels = contiguous_windows[trial_id]
 
-        print(top_windows[:20])
+#     for channel, ranges in channels.items():
 
-        windows = sorted(coverage_counter.keys())
-        counts = [coverage_counter[w] for w in windows]
+#         for start, end in ranges:
 
-        plt.figure(figsize=(10, 4))
-        plt.bar(windows, counts)
-        plt.xlabel("Window Index")
-        plt.ylabel("Coverage Count")
-        plt.title(f"Subject {subject_id} - Selected Window Coverage")
-        plt.show()
-    
+#             for w in range(start, end + 1):
+
+#                 coverage_counter[w] += 1
+
+#     # Print strongest windows
+#     top_windows = sorted(
+#         coverage_counter.items(),
+#         key=lambda x: x[1],
+#         reverse=True
+#     )
+
+#     print("\nTop windows:")
+#     print(top_windows[:20])
+
+#     # Plot
+#     windows = sorted(coverage_counter.keys())
+#     counts = [coverage_counter[w] for w in windows]
+
+#     plt.figure(figsize=(10, 4))
+#     plt.plot(windows, counts)
+#     plt.xlabel("Window Index")
+#     plt.ylabel("Selected Channels")
+#     plt.title(
+#         f"Subject {subject_id} - Trial {trial_id}"
+#     )
+#     plt.grid(True)
+#     plt.show()
+
 
 if __name__ == "__main__":
     main()

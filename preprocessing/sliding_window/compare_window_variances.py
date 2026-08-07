@@ -21,28 +21,26 @@ def compare_window_variances(
 
     selected = ratio > ratio_threshold
 
-    trial_ids, window_ids, channel_ids = np.where(
+    window_ids, channel_ids = np.where(
         selected
     )
 
     results = []
 
-    for t, w, c in zip(
-        trial_ids,
+    for w, c in zip(
         window_ids,
         channel_ids
     ):
 
         results.append({
-            "trial": int(t),
             "window": int(w),
             "channel": EEG_CHANNELS[c],
             "resting_var":
-                float(resting_variance[t, w, c]),
+                float(resting_variance[w, c]),
             "thinking_var":
-                float(thinking_variance[t, w, c]),
+                float(thinking_variance[w, c]),
             "ratio":
-                float(ratio[t, w, c])
+                float(ratio[w, c])
         })
-
+        
     return results

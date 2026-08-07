@@ -27,5 +27,5 @@ def compute_window_variance(
 
     return np.var(
         trial_windows,
-        axis=3
+        axis=2
     )

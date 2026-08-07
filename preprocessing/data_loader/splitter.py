@@ -10,21 +10,8 @@ EEG_CHANNELS = [
 
 
 def split_into_epochs(df):
-    """
-    Split FEIS dataframe into epoch-wise EEG arrays.
 
-    Parameters
-    ----------
-    df : pandas.DataFrame
-
-    Returns
-    -------
-    np.ndarray
-        Shape:
-        (n_epochs, n_channels, n_samples)
-    """
-
-    epochs = []
+    epochs = {}
 
     for epoch_id in sorted(df["Epoch"].unique()):
 
@@ -32,6 +19,11 @@ def split_into_epochs(df):
 
         eeg = epoch_df[EEG_CHANNELS].to_numpy().T
 
-        epochs.append(eeg)
+        epochs[epoch_id] = {
+            "eeg": eeg,
+            "label": epoch_df["Label"].iloc[0],
+            "stage": epoch_df["Stage"].iloc[0],
+            "flag": epoch_df["Flag"].iloc[0]
+        }
 
-    return np.array(epochs)
+    return epochs
