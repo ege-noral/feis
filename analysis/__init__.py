@@ -1,2 +1,0 @@
-from .channel_coverage import compute_channel_trial_coverage
-from .channel_coverage import evaluate_label_across_subjects

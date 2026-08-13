@@ -1,11 +1,9 @@
 from collections import defaultdict
 
-from .splitter import split_into_epochs
+from helper import split_into_epochs
 
 
-def group_trials_by_label(df):
-
-    epochs = split_into_epochs(df)
+def group_trials_by_label(epochs):
 
     grouped = defaultdict(list)
 

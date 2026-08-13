@@ -1,16 +1,16 @@
-from preprocessing.data_loader import load_subject_dataframe
+from data_loader import get_thinking_trial_epochs
 
-from preprocessing.data_loader import group_trials_by_label
+from helper import (
+    group_trials_by_label,
+    split_into_epochs
+)
 
 def test_group_trials_by_label():
 
-    thinking_df = load_subject_dataframe(
-        subject_id=1,
-        condition="resting"
-    )
+    epochs = get_thinking_trial_epochs(subject_id=1)
 
     groups = group_trials_by_label(
-        thinking_df
+        epochs
     )
 
     for label, trials in groups.items():

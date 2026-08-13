@@ -1,7 +1,5 @@
 from .windowing import create_sliding_windows
-from .variance import compute_window_variance
 from .trial_windows import create_trial_windows
-from .compare_window_variances import compare_window_variances
 from .contiguous_windows import find_contiguous_selected_windows
 from .task_segmentation import extract_task_segment
 from .merge import merge_segments

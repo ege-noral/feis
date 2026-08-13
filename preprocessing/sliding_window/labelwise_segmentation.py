@@ -1,18 +1,21 @@
 from collections import defaultdict
 
-from preprocessing.data_loader import (
-    load_subject_dataframe,
-    group_trials_by_label
-)
-
 from preprocessing.sliding_window import (
     create_sliding_windows,
-    compute_window_variance,
-    compare_window_variances,
     find_contiguous_selected_windows
 )
 
+from inspection import compare_window_variances
+
 from .merge import merge_segments
+
+from helper import ( 
+    compute_window_variance,
+    split_into_epochs,
+    group_trials_by_label
+)
+
+from data_loader import get_epochs
 
 from constants import EEG_CHANNELS
 
@@ -25,22 +28,16 @@ def extract_label_channel_segments(
     overlap=0.5
 ):
 
-    resting_df = load_subject_dataframe(
-        subject_id=subject_id,
-        condition="resting"
-    )
-
-    thinking_df = load_subject_dataframe(
-        subject_id=subject_id,
-        condition="thinking"
+    resting_trials, thinking_trials = get_epochs(
+         subject_id=subject_id
     )
 
     resting_groups = group_trials_by_label(
-        resting_df
+        resting_trials
     )
 
     thinking_groups = group_trials_by_label(
-        thinking_df
+        thinking_trials
     )
 
     resting_trials = resting_groups[label]

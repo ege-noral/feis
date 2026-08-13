@@ -1,17 +1,21 @@
 from collections import Counter
 
-from preprocessing.data_loader import load_subject_dataframe
-from preprocessing.data_loader import split_into_epochs
 from .merge import merge_segments
 
 from preprocessing.sliding_window import (
     create_trial_windows,
-    compute_window_variance,
-    compare_window_variances,
     find_contiguous_selected_windows,
     create_sliding_windows
 )
 
+from helper import ( 
+    compute_window_variance,
+    split_into_epochs
+)
+
+from inspection import compare_window_variances
+
+from data_loader import get_epochs
 
 def extract_task_segment(
     subject_id,
@@ -23,18 +27,9 @@ def extract_task_segment(
     overlap=0.5
 ):
 
-    resting_df = load_subject_dataframe(
-        subject_id=subject_id,
-        condition="resting"
+    resting_trials, thinking_trials = get_epochs(
+         subject_id=subject_id
     )
-
-    thinking_df = load_subject_dataframe(
-        subject_id=subject_id,
-        condition="thinking"
-    )
-
-    resting_trials = split_into_epochs(resting_df)
-    thinking_trials = split_into_epochs(thinking_df)
 
     thinking_trial = thinking_trials[trial_id]["eeg"]
     resting_trial = resting_trials[trial_id]["eeg"]

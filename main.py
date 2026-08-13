@@ -2,7 +2,7 @@ from preprocessing.sliding_window.labelwise_segmentation import (
     extract_label_channel_segments
 )
 
-from analysis import compute_channel_trial_coverage
+from inspection import compute_channel_trial_coverage
 
 from constants import (LABELS, SUBJECTS)
 
