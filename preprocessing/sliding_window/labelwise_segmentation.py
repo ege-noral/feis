@@ -7,12 +7,11 @@ from preprocessing.sliding_window import (
 
 from inspection import compare_window_variances
 
-from .merge import merge_segments
-
 from helper import ( 
     compute_window_variance,
     split_into_epochs,
-    group_trials_by_label
+    group_trials_by_label,
+    merge_segments
 )
 
 from data_loader import get_epochs

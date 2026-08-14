@@ -1,7 +1,5 @@
 from collections import Counter
 
-from .merge import merge_segments
-
 from preprocessing.sliding_window import (
     create_trial_windows,
     find_contiguous_selected_windows,
@@ -10,7 +8,8 @@ from preprocessing.sliding_window import (
 
 from helper import ( 
     compute_window_variance,
-    split_into_epochs
+    split_into_epochs,
+    merge_segments
 )
 
 from inspection import compare_window_variances
