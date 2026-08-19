@@ -21,7 +21,7 @@ def extract_task_segment(
     trial_id,
     ratio_threshold=12.0,
     top_k_channels=5,
-    coverage_threshold=1,
+    coverage_threshold=4,
     window_size=13,
     overlap=0.5
 ):
