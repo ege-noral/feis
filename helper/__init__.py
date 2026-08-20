@@ -1,4 +1,3 @@
-from .compute_window_variance import compute_window_variance
 from .split_into_epochs import split_into_epochs
 from .group_trials_by_label import group_trials_by_label
-from .merge_segments import merge_segments
+from .robust_zscore import compute_robust_zscore

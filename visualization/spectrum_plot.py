@@ -82,3 +82,8 @@ def plot_trial_spectrum(
     plt.grid(True)
 
     plt.show()
+
+plot_trial_spectrum(
+    subject_id=8,
+    trial_id=128
+)

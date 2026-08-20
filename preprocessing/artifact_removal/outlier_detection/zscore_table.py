@@ -1,6 +1,5 @@
-from preprocessing.artifact_removal.outlier_detection.robust_zscore import (
-    compute_robust_zscore
-)
+from helper import compute_robust_zscore
+
 
 
 FEATURE_COLUMNS = [

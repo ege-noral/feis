@@ -1,6 +1,3 @@
-import pandas as pd
-
-
 FEATURES = [
     "peak_to_peak",
     "variance",
@@ -17,25 +14,32 @@ def build_artifact_score_table(
     features=FEATURES,
 ):
     """
-    Build an epoch-level artifact score table from robust z-scores.
+    Build an epoch-level artifact summary using a
+    FASTER-inspired outlier decision strategy.
+
+    A channel within an epoch is marked suspicious if
+    at least one artifact feature is an outlier.
+
+    Robust z-scores are used instead of classical z-scores.
 
     Parameters
     ----------
-    zscore_df : pd.DataFrame
-        Table containing one row per epoch-channel pair
-        and robust z-score columns (<feature>_rz).
+    zscore_df : pandas.DataFrame
+        One row per epoch-channel pair containing robust
+        z-score columns (<feature>_rz).
 
     threshold : float
-        Robust z-score threshold for an outlier.
+        Robust z-score threshold.
 
     features : list[str]
-        Artifact features to evaluate.
+        Features used for artifact detection.
 
     Returns
     -------
-    pd.DataFrame
+    pandas.DataFrame
         One row per epoch containing:
         - suspicious_channels
+        - suspicious_channel_ratio
         - total_flags
         - max_flags_in_channel
     """
@@ -45,31 +49,48 @@ def build_artifact_score_table(
     flag_columns = []
 
     for feature in features:
+
         z_col = f"{feature}_rz"
         flag_col = f"{feature}_flag"
 
-        # Mean amplitude deviation can be abnormal
-        # in either positive or negative direction.
-        if feature == "mean_amplitude_deviation":
+        # FASTER-like statistical features:
+        # both unusually HIGH and unusually LOW values
+        # may represent abnormal channels.
+        if feature in [
+            "peak_to_peak",
+            "variance",
+            "max_gradient",
+            "mean_amplitude_deviation",
+        ]:
             df[flag_col] = df[z_col].abs() > threshold
 
-        # For the remaining features,
-        # unusually HIGH values are suspicious.
-        else:
+        # Our additional features:
+        # only unusually HIGH values are interpreted
+        # as artifact evidence.
+        elif feature in [
+            "kurtosis",
+            "hf_power_ratio",
+        ]:
             df[flag_col] = df[z_col] > threshold
 
         flag_columns.append(flag_col)
 
-    # Number of suspicious features for each channel × epoch
+    # Number of abnormal features for each channel × epoch
     df["flag_count"] = df[flag_columns].sum(axis=1)
+
+    # FASTER-like decision:
+    # at least one abnormal feature -> suspicious channel
+    df["suspicious_channel"] = df["flag_count"] > 0
+
+    n_channels = df["channel"].nunique()
 
     # Epoch-level summary
     epoch_summary = (
         df.groupby("epoch")
         .agg(
             suspicious_channels=(
-                "flag_count",
-                lambda x: (x > 0).sum()
+                "suspicious_channel",
+                "sum"
             ),
             total_flags=(
                 "flag_count",
@@ -81,6 +102,11 @@ def build_artifact_score_table(
             ),
         )
         .reset_index()
+    )
+
+    epoch_summary["suspicious_channel_ratio"] = (
+        epoch_summary["suspicious_channels"]
+        / n_channels
     )
 
     return epoch_summary

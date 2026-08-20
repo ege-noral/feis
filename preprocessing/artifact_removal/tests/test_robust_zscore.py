@@ -1,8 +1,7 @@
 import numpy as np
 
-from preprocessing.artifact_removal.outlier_detection.robust_zscore import (
-    compute_robust_zscore
-)
+from helper import compute_robust_zscore
+
 
 
 def test_robust_zscore_detects_outlier():

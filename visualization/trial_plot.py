@@ -84,3 +84,8 @@ def plot_trial(
 
     plt.tight_layout()
     plt.show()
+
+plot_trial(
+    subject_id=3,
+    trial_id=107    
+)
