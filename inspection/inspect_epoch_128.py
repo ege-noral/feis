@@ -70,7 +70,12 @@ for _, row in epoch_128.iterrows():
 
         z = row[f"{feature}_rz"]
 
-        if abs(z) > threshold:
+        if feature == "mean_amplitude_deviation":
+            is_outlier = abs(z) > threshold
+        else:
+            is_outlier = z > threshold
+
+        if is_outlier:
             suspicious.append(
                 f"{feature} ({z:.2f})"
             )

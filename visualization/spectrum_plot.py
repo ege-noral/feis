@@ -7,7 +7,7 @@ from helper import (
     split_into_epochs
 )
 
-from preprocessing.artefact_removal import bandpass_filter
+from preprocessing.artifact_removal import bandpass_filter
 
 from data_loader import get_epochs
 
