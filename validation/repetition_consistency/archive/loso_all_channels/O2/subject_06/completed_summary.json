@@ -1,0 +1,16 @@
+{
+    "channel": "O2",
+    "subject_id": 6,
+    "semi_synthetic_train_score": 0.5869954648526077,
+    "thinking_examples": 160,
+    "resting_examples": 160,
+    "thinking_mean_detected": 4.11875,
+    "resting_mean_detected": 3.3375,
+    "mean_difference_thinking_minus_resting": 0.7812500000000004,
+    "thinking_median_detected": 4.0,
+    "resting_median_detected": 4.0,
+    "thinking_ge4_percent": 78.75,
+    "resting_ge4_percent": 53.75,
+    "ge4_difference_percentage_points": 25.0,
+    "thinking_greater_than_resting": true
+}

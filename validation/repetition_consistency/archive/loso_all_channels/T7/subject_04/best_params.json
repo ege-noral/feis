@@ -1,0 +1,10 @@
+{
+    "window_seconds": 0.6,
+    "step_seconds": 0.1,
+    "extra_lag_seconds": 0.0,
+    "top_k": 3,
+    "smoothing_windows": 1,
+    "peak_min_height": 0.14527569083255193,
+    "peak_prominence": 0.10040313920014937,
+    "min_peak_distance_seconds": 0.5
+}

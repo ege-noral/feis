@@ -34,7 +34,7 @@ STEP_SECONDS = 0.10
 
 epoch = get_one_epoch(
     subject_id=SUBJECT_ID,
-    condition="thinking",
+    condition="resting",
     epoch_idx=EPOCH_IDX,
 )
 
@@ -51,7 +51,7 @@ print("Signal shape:", signal.shape)
 # 2. DC offset'i kaldır
 # --------------------------------------------------
 
-signal = demean(signal)
+# signal = demean(signal)
 
 
 # --------------------------------------------------

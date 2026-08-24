@@ -1,0 +1,16 @@
+{
+    "channel": "FC5",
+    "subject_id": 7,
+    "semi_synthetic_train_score": 0.7531844980416409,
+    "thinking_examples": 160,
+    "resting_examples": 160,
+    "thinking_mean_detected": 2.2125,
+    "resting_mean_detected": 1.90625,
+    "mean_difference_thinking_minus_resting": 0.3062499999999999,
+    "thinking_median_detected": 3.0,
+    "resting_median_detected": 2.0,
+    "thinking_ge4_percent": 26.25,
+    "resting_ge4_percent": 16.25,
+    "ge4_difference_percentage_points": 10.0,
+    "thinking_greater_than_resting": true
+}

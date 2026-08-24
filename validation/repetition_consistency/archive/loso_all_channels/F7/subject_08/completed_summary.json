@@ -1,0 +1,16 @@
+{
+    "channel": "F7",
+    "subject_id": 8,
+    "semi_synthetic_train_score": 0.7008979591836735,
+    "thinking_examples": 160,
+    "resting_examples": 160,
+    "thinking_mean_detected": 0.05625,
+    "resting_mean_detected": 0.23125,
+    "mean_difference_thinking_minus_resting": -0.17500000000000002,
+    "thinking_median_detected": 0.0,
+    "resting_median_detected": 0.0,
+    "thinking_ge4_percent": 0.0,
+    "resting_ge4_percent": 0.625,
+    "ge4_difference_percentage_points": -0.625,
+    "thinking_greater_than_resting": false
+}

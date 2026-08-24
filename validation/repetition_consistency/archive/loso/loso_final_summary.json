@@ -1,0 +1,20 @@
+{
+    "channel": "P7",
+    "subjects": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+    ],
+    "n_subjects": 8,
+    "n_trials_per_fold": 60,
+    "background_epochs_per_training_subject": 10,
+    "subjects_with_thinking_mean_greater_than_resting": 5,
+    "mean_subject_level_difference": 0.07265625000000003,
+    "median_subject_level_difference": 0.05625000000000013,
+    "mean_ge4_percentage_point_difference": 2.1875000000000004
+}
